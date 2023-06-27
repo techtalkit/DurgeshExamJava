@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -20,6 +23,7 @@ public class QuestionController {
 
     @Autowired
     private QuizService quizService;
+
 
     //add question api
     @PostMapping("/")
@@ -45,10 +49,24 @@ public class QuestionController {
     }
     //get questions by quiz id
     @GetMapping("/quiz/{qId}")
-    public ResponseEntity<Set<Question>> getQuestionByQuiz(@PathVariable("qId") Long qId){
-//        Quiz quiz=new Quiz();
-//        quiz.setqId(qId);
-//        Set<Question> questionOfQuiz=this.questionService.getQuestionsOfQuiz(quiz);
-//        return ResponseEntity.ok(questionOfQuiz);
+    public ResponseEntity<List<Question>> getQuestionByQuiz(@PathVariable("qId") Long qId){
+        Quiz quiz=this.quizService.getQuiz(qId);
+        //We will get the number of questions of all the quizzes
+        Set<Question> questions=quiz.getQuestions();
+        //We need to send those only questions that have in the quiz
+        List list=new ArrayList(questions);
+        if(list.size()>Integer.parseInt(quiz.getNumberOfQuestions())){
+            list=list.subList(0,Integer.parseInt(quiz.getNumberOfQuestions()+1));
+        }
+        //shuffle will change the order of the questions
+        Collections.shuffle(list);
+        return ResponseEntity.ok(list);
     }
+    //delete the question
+    @DeleteMapping("/{quesId}")
+    public ResponseEntity<String> deleteQuestionById(@PathVariable("quesId") Long quesId){
+        this.questionService.deleteQuestion(quesId);
+        return ResponseEntity.ok("Question is deleted successfully");
+    }
+
 }
