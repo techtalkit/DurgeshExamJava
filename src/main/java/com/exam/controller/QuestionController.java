@@ -62,6 +62,14 @@ public class QuestionController {
         Collections.shuffle(list);
         return ResponseEntity.ok(list);
     }
+    //get all questions by quiz id
+    @GetMapping("/quiz/all/{qId}")
+    public ResponseEntity<Set<Question>> getQuestionByQuizAdmin(@PathVariable("qId") Long qId){
+        Quiz quiz=this.quizService.getQuiz(qId);
+        //We will get the number of questions of all the quizzes
+        Set<Question> questionsOfQuiz=quiz.getQuestions();
+        return ResponseEntity.ok(questionsOfQuiz);
+    }
     //delete the question
     @DeleteMapping("/{quesId}")
     public ResponseEntity<String> deleteQuestionById(@PathVariable("quesId") Long quesId){
