@@ -1,5 +1,7 @@
 package com.exam.entity.exam;
 
+import lombok.experimental.Tolerate;
+
 import javax.persistence.*;
 
 @Entity

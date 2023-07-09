@@ -1,7 +1,5 @@
 package com.exam.entity.exam;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -20,7 +18,7 @@ public class Quiz {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
-    @OneToMany(mappedBy = "quiz",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="quiz",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Question> questions=new HashSet<>();
     public Quiz() {
