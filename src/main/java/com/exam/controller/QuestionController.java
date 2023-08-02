@@ -76,5 +76,26 @@ public class QuestionController {
         this.questionService.deleteQuestion(quesId);
        // return ResponseEntity.ok("Question is deleted successfully");
     }
+    //eval quiz
+    @PostMapping("/eval-quiz")
+    public ResponseEntity<?> evalQuiz(@RequestBody List<Question> questions){
+        System.out.println(questions);
+        double marksGot=0;
+        int correctAnswers=0;
+        int attempted=0;
+        for(Question q: questions){
+            Question question=this.questionService.get(q.getQuesId());
+            if(question.getAnswer().trim().equals(q.getGivenAnswer().trim())){
+                //correct
+                correctAnswers++;
+                double marksSingleQuestion=Double.parseDouble(questions.get(0).getQuiz().getMaxMarks())/questions.size();
+                marksGot+=marksSingleQuestion;
+            }
+            if(q.getGivenAnswer().trim().equals("") || q.getGivenAnswer()==null ){
+               attempted++;
+            }
+        };
+        return ResponseEntity.ok("Got Questions with answers");
+    }
 
 }
