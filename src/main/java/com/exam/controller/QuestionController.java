@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/question")
@@ -85,17 +82,20 @@ public class QuestionController {
         int attempted=0;
         for(Question q: questions){
             Question question=this.questionService.get(q.getQuesId());
-            if(question.getAnswer().trim().equals(q.getGivenAnswer().trim())){
+            if(question.getAnswer().equals(q.getGivenAnswer())){
                 //correct
                 correctAnswers++;
-                double marksSingleQuestion=Double.parseDouble(questions.get(0).getQuiz().getMaxMarks())/questions.size();
+                double marksSingleQuestion=Double.parseDouble(
+                        questions.get(0).getQuiz().getMaxMarks())/questions.size();
                 marksGot+=marksSingleQuestion;
             }
-            if(q.getGivenAnswer().trim().equals("") || q.getGivenAnswer()==null ){
+            if(q.getGivenAnswer()!=null ){
                attempted++;
             }
         };
-        return ResponseEntity.ok("Got Questions with answers");
+        Map<Object,Object> map=
+                Map.of("marksGot",marksGot,"correctAnswers",correctAnswers,"attempted",attempted);
+        return ResponseEntity.ok(map);
     }
 
 }
