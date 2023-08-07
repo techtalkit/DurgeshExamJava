@@ -1,5 +1,7 @@
 package com.exam.entity.exam;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
@@ -91,6 +93,7 @@ public class Question {
     public void setOption4(String option4) {
         this.option4 = option4;
     }
+
 
     public String getAnswer() {
         return answer;
